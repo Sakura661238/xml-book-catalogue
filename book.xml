@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bookCatalogue>
+<book id="1">
+<title>Learning XML</title>
+<author>Erik T. Ray</author>
+<price>39.95</price>
+</book>
+<book id="2">
+<title>XML in a Nutshell</title>
+<author>Elliotte Rusty Harold</author>
+<price>49.95</price>
+</book>
+<book id="3">
+<title>Beginning XML</title>
+<author>Joe Fawcett</author>
+<price>59.95</price>
+</book>
+</bookCatalogue>
