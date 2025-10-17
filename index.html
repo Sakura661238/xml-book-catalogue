@@ -3,29 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <title>Book Catalogue</title>
+    <style>
+        /* Overall page styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        /* Title styles */
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+
+        /* Book list container */
+        #bookList {
+            display: grid;
+            gap: 20px;
+        }
+
+        /* Individual book card styles */
+        #bookList div {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        #bookList div:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Styles for book info paragraphs */
+        #bookList p {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+
+        /* Styles for emphasized text */
+        #bookList strong {
+            color: #2c3e50;
+            min-width: 100px;
+            display: inline-block;
+        }
+
+        /* Divider line styles */
+        #bookList hr {
+            border: none;
+            border-top: 1px dashed #ddd;
+            margin: 15px 0 5px;
+        }
+
+        /* Error message styles */
+        #bookList.error {
+            color: #e74c3c;
+            text-align: center;
+            padding: 20px;
+            font-size: 1.1em;
+        }
+    </style>
 </head>
 <body>
     <h1>Book Catalogue</h1>
     <div id="bookList"></div>
 
     <script>
-        // 1. Use the fetch API to obtain the XML file
+        // 1. Use the fetch API to retrieve the XML file
         fetch('book.xml')
             .then(response => {
             if(!response.ok) {
-                throw new Error('Fail to get the XML file ' + response.statusText);
+                throw new Error('Failed to retrieve the XML file: ' + response.statusText);
             }
-            // Convert the response to text format (XML needs to be read as text first before being parsed)
+            // Convert response to text format (XML must be read as text before parsing)
             return response.text();
         })
-            // 2. Parse XML text
+            // 2. Parse the XML text
             .then(xmlText => {
             const parser = new DOMParser();
             const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
             // 3. Extract all "book" elements
             const books = xmlDoc.getElementsByTagName('book');
             const bookListDiv = document.getElementById('bookList');
-            // 4. Traverse the "book" elements and render them onto the HTML page
+            // 4. Iterate through "book" elements and render them to the HTML page
             for(let i = 0; i < books.length; i++) {
                 const book = books[i];
                 const id = book.getAttribute('id');
@@ -33,7 +100,7 @@
                 const author = book.getElementsByTagName('author')[0].textContent;
                 const price = book.getElementsByTagName('price')[0].textContent;
                 
-                // Create HTML elements to display information about a single book.
+                // Create HTML elements to display individual book information
                 const bookDiv = document.createElement('div');
                 bookDiv.innerHTML = `
                 <p><strong>Book ID:</strong> ${id}</p>
@@ -45,9 +112,12 @@
                 bookListDiv.appendChild(bookDiv);
             }
             })
-            .catch(error => {console.error('Error fetching XML:', error.message);
-                document.getElementById('bookList').textContent = 'Failed to load book information. Please check the file path.';
-        });
+            .catch(error => {
+                console.error('Error fetching XML:', error.message);
+                const bookListDiv = document.getElementById('bookList');
+                bookListDiv.textContent = 'Failed to load book information. Please check the file path.';
+                bookListDiv.classList.add('error'); // Add error style class
+            });
     </script>
 </body>
 </html>
